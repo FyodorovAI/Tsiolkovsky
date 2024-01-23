@@ -73,9 +73,6 @@ Tsiolkovsky is an open-source project, and contributions are welcome. If you wan
 
 To see how to contribute, visit [Contribution guidelines](https://github.com/fyodorovai/tsiolkovsky/blob/main/.github/CONTRIBUTING.md)
 
-To help with contributions, you can search, navigate, and understand Tsiolkovsky's source code using Onboard AI's free tool LearnThisRepo.
-[learnthisrepo.com/fyodorovai](https://learnthisrepo.com/fyodorovai)
-
 <a href="https://github.com/fyodorovai/tsiolkovsky/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=fyodorovai/tsiolkovsky" />
 </a>
