@@ -1,0 +1,27 @@
+{
+  "name": "tsiolkovsky",
+  "version": "1.0.0",
+  "description": "Manage the Tools that your LLMs use",
+  "main": "index.js",
+  "scripts": {
+    "run": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
+    "dotenv": "^16.4.0",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.11",
+    "@types/express": "^4.17.21",
+    "@types/mocha": "^10.0.6",
+    "@types/supertest": "^6.0.2",
+    "chai": "^5.0.0",
+    "jest": "^29.7.0",
+    "mocha": "^10.2.0",
+    "supertest": "^6.3.4",
+    "typescript": "^5.3.3"
+  }
+}
