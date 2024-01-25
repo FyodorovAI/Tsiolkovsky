@@ -54,6 +54,10 @@ Tsiolkovsky lets you add any API you want as a tool, including:
 
 
 ## 🧐 Tutorials
+##### Authenticate against API
+```
+Authorization: Bearer <YOUR_JWT>
+```
 
 @TODO
 

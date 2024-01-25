@@ -1,11 +1,10 @@
 from models.tool import ToolModel
-from supabase import create_client, Client
 from typing import Union
-from config.config import Settings
 from datetime import datetime, timedelta
+from supabase import  Client
+from config.supabase import get_supabase
 
-settings = Settings()
-supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+supabase: Client = get_supabase()
 
 class Tool():
     @staticmethod    

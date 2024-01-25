@@ -1,12 +1,11 @@
 
 from pydantic import BaseModel
 import re
-from supabase import create_client, Client
 from models.health_check import HealthUpdateModel
-from config.config import Settings
+from supabase import  Client
+from config.supabase import get_supabase
 
-settings: Settings = Settings()
-supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
+supabase: Client = get_supabase()
 
 class HealthUpdate(BaseModel):
     health_update: HealthUpdateModel

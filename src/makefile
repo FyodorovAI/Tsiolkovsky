@@ -13,7 +13,7 @@ install:
 # Run the application
 run:
 	. ./venv/bin/activate
-	python main.py
+	uvicorn main:app --reload
 
 # Install test requirements
 install-test:
