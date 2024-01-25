@@ -42,7 +42,7 @@ Tsiolkovsky lets you add any API you want as a tool, including:
 - Locally hosted APIs with dynamic IPs.
 - Search engines
 - Wolfram Alpha
-- Wikipedia
+- Google Drive
 
 
 ## 👀 Features:
