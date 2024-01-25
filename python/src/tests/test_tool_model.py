@@ -12,7 +12,7 @@ def get_default_tool(
         logo_url="https://example.com/logo.png",
         contact_email="I7JQK@example.com",
         legal_info_url="https://example.com/legal-info.pdf",
-    ):
+    ) -> ToolModel:
 
     try:
         tool = ToolModel(

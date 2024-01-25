@@ -32,7 +32,7 @@ class ToolModel(BaseModel):
         else:
             return True
 
-    def toDict(self) -> dict:
+    def to_dict(self) -> dict:
         return {
             'name_for_human': self.name_for_human,
             'name_for_ai': self.name_for_ai,

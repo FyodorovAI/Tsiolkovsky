@@ -2,14 +2,16 @@ from models.tool import ToolModel
 from supabase import create_client, Client
 from typing import Union
 from config.config import Settings
+from datetime import datetime, timedelta
+
 settings = Settings()
 supabase: Client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
 
 class Tool():
     @staticmethod    
-    async def createInDB(tool: ToolModel) -> str:
+    def create_in_db(tool: ToolModel) -> str:
         try:
-            result = supabase.table('tools').insert(tool.toDict()).execute()
+            result = supabase.table('tools').insert(tool.to_dict()).execute()
             tool_id = result.data[0]['id']
             print('Created tool', result.data[0])
             return tool_id
@@ -18,7 +20,7 @@ class Tool():
             raise e
 
     @staticmethod
-    async def updateInDB(id: str, tool: dict) -> dict:
+    def update_in_db(id: str, tool: dict) -> dict:
         if not id:
             raise ValueError('Tool ID is required')
         try:
@@ -29,7 +31,7 @@ class Tool():
             raise
 
     @staticmethod
-    async def deleteInDB(id: str) -> bool:
+    def delete_in_db(id: str) -> bool:
         if not id:
             raise ValueError('Tool ID is required')
         try:
@@ -40,7 +42,7 @@ class Tool():
             raise e
 
     @staticmethod
-    async def getInDB(id: str) -> dict:
+    def get_in_db(id: str) -> dict:
         if not id:
             raise ValueError('Tool ID is required')
         try:
@@ -50,4 +52,15 @@ class Tool():
             return tool
         except Exception as e:
             print('Error fetching tool', str(e))
+            raise e
+
+    @staticmethod
+    def get_all_in_db(limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
+        try:
+            result = supabase.table('tools').select('*').limit(limit).lt('created_at', created_at_lt).execute()
+            tools = result.data
+            print('Fetched tools', tools)
+            return tools
+        except Exception as e:
+            print('Error fetching tools', str(e))
             raise e

@@ -3,3 +3,5 @@ pydantic[email]
 supabase
 pydantic-settings
 python-dotenv
+fastapi
+uvicorn
