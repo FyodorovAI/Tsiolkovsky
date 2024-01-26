@@ -1,0 +1,36 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/truecharts/apps/tsiolkovsky
+  tag: 0.8.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  ports: 8000
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 100Mi
+  limits:
+    cpu: 500m
+    memory: 500Mi
+
+ingress:
+  enabled: true
+  hosts:
+    - tsiolkovsky.danielransom.com
+  tls: true
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+env:
+  - supabaseProjectURL: ""
+  - supabaseAPIKey: ""
+  - jwtSecret: ""
