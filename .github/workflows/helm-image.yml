@@ -1,33 +1,16 @@
-name: CI
+name: Helm Publish
 
 on:
   push:
     branches:
-      - main
-
-env:
-  GCR_IMAGE: gcr.io/fyodorovai/${{ github.repository }}
+      - dev
 
 jobs:
   build:
-    name: publish gcr
     runs-on: ubuntu-latest
-    environment: prod
     steps:
-      - uses: actions/checkout@v4
-        name: checkout repo
-      
-      - name: install helm
-        uses: Azure/setup-helm@v1
-
-      - name: login to gcr using helm
-        run: |
-          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ${{ env.GCR_IMAGE }} --username dantheman0207 --password-stdin
-
-      - name: save helm chart to local registry
-        run: |
-          helm chart save ${{ github.workspace }}/helm/ ${{ env.GCR_IMAGE }}:${{ github.sha }}
-
-      - name: publish chart to gcr
-        run: |
-          helm chart push ${{ env.GCR_IMAGE }}:${{ github.sha }}
+      - uses: actions/checkout@v1
+      - uses: J12934/helm-gh-pages-action@master
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
+          chart-path: Tsiolkovsky/helm
