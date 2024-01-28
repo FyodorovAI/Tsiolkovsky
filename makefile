@@ -7,3 +7,6 @@ helm-build:
 
 helm-deploy:
 	./scripts/deploy-helm.sh
+
+docker-build:
+	./scripts/docker-push.sh
