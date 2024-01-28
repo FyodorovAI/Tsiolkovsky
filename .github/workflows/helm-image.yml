@@ -27,7 +27,12 @@ jobs:
         run: |
           helm package ./helm
 
-      - name: Publish Helm Chart to GitHub Packages
-        uses: helm/chart-releaser-action@v1
-        with:
-          charts_dir: helm
+      - name: Log in to GitHub Packages with Helm registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io --username USERNAME --password-stdin
+
+      - name: Push Helm Chart
+        run: |
+            helm push ./helm/*.tgz oci://ghcr.io/${{ github.organization }}/${{ github.repository }}
+
+      
