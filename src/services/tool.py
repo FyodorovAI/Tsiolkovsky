@@ -12,7 +12,6 @@ class Tool():
         try:
             result = supabase.table('tools').insert(tool.to_dict()).execute()
             tool_id = result.data[0]['id']
-            print('Created tool', result.data[0])
             return tool_id
         except Exception as e:
             print('Error creating tool', str(e))
@@ -47,7 +46,6 @@ class Tool():
         try:
             result = supabase.table('tools').select('*').eq('id', id).limit(1).execute()
             tool = result.data[0]
-            print('Fetched tool', tool)
             return tool
         except Exception as e:
             print('Error fetching tool', str(e))
@@ -56,9 +54,13 @@ class Tool():
     @staticmethod
     def get_all_in_db(limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
         try:
-            result = supabase.table('tools').select('*').limit(limit).lt('created_at', created_at_lt).execute()
+            result = supabase.from_('tools') \
+                .select("*") \
+                .limit(limit) \
+                .lt('created_at', created_at_lt) \
+                .order('created_at', desc=True) \
+                .execute()
             tools = result.data
-            print('Fetched tools', tools)
             return tools
         except Exception as e:
             print('Error fetching tools', str(e))

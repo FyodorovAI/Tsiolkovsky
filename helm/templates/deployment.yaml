@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+spec:
+    {{- if not .Values.autoscaling.enabled }}
+    replicas: {{ .Values.replicaCount }}
+    {{- end}}
+    template:
+        spec:
+            containers:
+                - name: {{ .Chart.Name }}
+                    image: "{{ .Values.image.repository}}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+                    imagePullPolicy: {{ .Values.image.pullPolicy }}
+                    env:
+                        {{- range .Values.env }}
+                        - name: {{ .name }}
+                            value: {{ .value }}
+                        {{- end }}
+                    ports:
+                        - name: http
+                          containerPort: 8000
+                          protocol: TCP
+                    livenessProbe:
+                        httpGet:
+                            path: /health
+                            port: http
+                    readinessProbe:
+                        httpGet:
+                            path: /health
+                            port: http
+                    resources:
+                        {{- toYaml .Values.resources | nindent 12 }}

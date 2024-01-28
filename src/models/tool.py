@@ -63,6 +63,10 @@ class ToolModel(BaseModel):
             raise ValueError('Name for AI exceeds maximum length')
         if not re.match(VALID_CHARACTERS_REGEX, name_for_ai):
             raise ValueError('Name for AI contains invalid characters')
+        if name_for_ai != name_for_ai.lower():
+            raise ValueError('Name for AI must be lowercase')
+        if re.match(r' ', name_for_ai):
+            raise ValueError('Name for AI must not contain spaces')
         return name_for_ai
 
     @staticmethod
