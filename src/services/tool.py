@@ -54,7 +54,12 @@ class Tool():
     @staticmethod
     def get_all_in_db(limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
         try:
-            result = supabase.table('tools').select('*').limit(limit).lt('created_at', created_at_lt).execute()
+            result = supabase.from_('tools') \
+                .select("*") \
+                .limit(limit) \
+                .lt('created_at', created_at_lt) \
+                .order('created_at', desc=True) \
+                .execute()
             tools = result.data
             return tools
         except Exception as e:
