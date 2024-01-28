@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: https://github.com/FyodorovAI/Tsiolkovsky
+  repository: https://github.com/fyodorovai/tsiolkovsky
   tag: main
   pullPolicy: IfNotPresent
 
