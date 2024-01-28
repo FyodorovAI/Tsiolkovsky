@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: https://github.com/FyodorovAI/Tsiolkovsky:main
-  tag: 0.8.0
+  repository: https://github.com/FyodorovAI/Tsiolkovsky
+  tag: main
   pullPolicy: IfNotPresent
 
 service:
