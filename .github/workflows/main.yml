@@ -10,10 +10,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
       - name: Helm Chart Releaser
+        with:
+          charts_dir: helm
         uses: helm/chart-releaser-action@v1.6.0
   welcome:
     runs-on: ubuntu-latest
