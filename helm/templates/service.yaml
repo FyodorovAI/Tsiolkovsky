@@ -2,7 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
     name: {{ .Chart.Name }}
+    labels:
+        suite: fyodorov
+        service: tsiolkovsky
 spec:
     type: {{ .Values.service.type }}
     ports:
-        {{- range .Values.service.ports }}
+      - port: 8000
+        targetPort: 8000
+        protocol: TCP
+        name: tsiolkovsky

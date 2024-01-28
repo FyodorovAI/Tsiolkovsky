@@ -1,13 +1,17 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/truecharts/apps/tsiolkovsky
+  repository: https://github.com/FyodorovAI/Tsiolkovsky
   tag: 0.8.0
   pullPolicy: IfNotPresent
 
 service:
   type: ClusterIP
-  ports: 8000
+  ports: 
+    - port: 8000
+      targetPort: 8000
+      protocol: TCP
+      name: http
 
 resources:
   requests:
@@ -31,6 +35,9 @@ autoscaling:
   targetMemoryUtilizationPercentage: 80
 
 env:
-  - supabaseProjectURL: ""
-  - supabaseAPIKey: ""
-  - jwtSecret: ""
+  - name: supabaseProjectURL
+    value: ""
+  - name: supabaseAPIKey
+    value: ""
+  - name: jwtSecret
+    value: ""
