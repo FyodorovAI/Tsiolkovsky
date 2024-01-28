@@ -27,5 +27,4 @@ jobs:
       - name: Publish Helm Chart to GitHub Packages
         uses: helm/chart-releaser-action@v1
         with:
-          chart_path: ./*.tgz
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          charts_dir: helm
