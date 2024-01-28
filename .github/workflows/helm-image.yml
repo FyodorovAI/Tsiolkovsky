@@ -5,24 +5,29 @@ on:
     branches:
       - main
 
+env:
+  GCR_IMAGE: gcr.io/fyodorovai/${{ github.repository }}
+
 jobs:
   build:
+    name: publish gcr
     runs-on: ubuntu-latest
-
+    environment: prod
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        name: checkout repo
+      
+      - name: install helm
+        uses: Azure/setup-helm@v1
 
-      - name: Set up Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: 'v3.6.3'
+      - name: login to gcr using helm
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ${{ env.GCR_IMAGE }} --username ${{ github.repository_owner }} --password-stdin
 
-      - name: Push Helm chart to OCI compatible registry (Github)
-        uses: bsord/helm-push@4.2.0
-        with:
-          useOCIRegistry: true
-          registry-url: oci://ghcr.io/${{ github.repository }}
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
-          chart-folder: helm
+      - name: save helm chart to local registry
+        run: |
+          helm chart save ${{ github.workspace }}/helm/ ${{ env.GCR_IMAGE }}:${{ github.sha }}
+
+      - name: publish chart to gcr
+        run: |
+          helm chart push ${{ env.GCR_IMAGE }}:${{ github.sha }}
