@@ -1,18 +1,29 @@
-name: Helm Publish
+name: Package Helm Chart
 
 on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
-  build:
+  package:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: J12934/helm-gh-pages-action@master
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v1
         with:
-          access-token: ${{ secrets.GITHUB_TOKEN }}
-          charts-folder: helm
-          deploy-branch: main
+          version: '3'
+
+      - name: Package Helm Chart
+        run: |
+          helm package ./helm
+
+      - name: Publish Helm Chart to GitHub Packages
+        uses: helm/chart-releaser-action@v1
+        with:
+          chart_path: ./*.tgz
+          github_token: ${{ secrets.GITHUB_TOKEN }}
