@@ -33,6 +33,6 @@ jobs:
 
       - name: Push Helm Chart
         run: |
-            helm push ./*.tgz oci://ghcr.io/${{ github.organization }}/${{ github.repository }}
+            helm push ./*.tgz oci://ghcr.io${{ github.organization }}/${{ github.repository }}
 
       
