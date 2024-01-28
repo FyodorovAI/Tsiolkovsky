@@ -11,7 +11,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  TAG: ${{ github.ref == 'refs/heads/main' && 'latest' || replace(github.ref, 'refs/heads/', '') }}
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
