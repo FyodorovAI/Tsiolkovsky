@@ -4,5 +4,4 @@ dist/
 __pycache__
 *.tgz
 venv
-custom-values.yaml
-custom-values.yml
+scripts/custom-values.yaml
