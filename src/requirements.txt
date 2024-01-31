@@ -6,3 +6,5 @@ python-dotenv
 fastapi
 uvicorn
 PyJWT
+asyncio
+fyodorov-utils==0.0.2

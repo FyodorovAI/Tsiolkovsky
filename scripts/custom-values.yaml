@@ -1,0 +1,7 @@
+env:
+  - name: supabaseProjectURL
+    value: "https://ljmwdvefkgyxrucsgekw.supabase.co"
+  - name: supabaseAPIKey
+    value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbXdkdmVma2d5eHJ1Y3NnZWt3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTcwNjA0NjQ2MiwiZXhwIjoyMDIxNjIyNDYyfQ.h6PS8IkW5tdx6HGlLc7xs0QoMwQUHk-uAE9V40e5rFc"
+  - name: jwtSecret
+    value: "F9J6iPHoRQEA7ooLKR2fOqMK53fYYDmA2z9FDUh73isogjwzAAk+5u6alVnPqdPywV6vd7wCy2AuVQRehq3kMw=="
