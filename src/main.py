@@ -10,6 +10,11 @@ from typing import List
 import uvicorn
 
 import sys
+sys.path.append('/path/to/venv/lib/python3.11/site-packages')
+import fyodorov_utils
+
+
+import sys
 print("System executable: ", sys.executable)
 
 from fyodorov_utils.auth.auth import authenticate
