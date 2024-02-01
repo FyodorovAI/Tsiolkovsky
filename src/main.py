@@ -9,14 +9,6 @@ import jwt
 from typing import List
 import uvicorn
 
-import sys
-sys.path.append('/path/to/venv/lib/python3.11/site-packages')
-import fyodorov_utils
-
-
-import sys
-print("System executable: ", sys.executable)
-
 from fyodorov_utils.auth.auth import authenticate
 from fyodorov_utils.decorators.logging import error_handler
 
@@ -37,22 +29,22 @@ supabase = get_supabase()
 def root():
     return 'Tsiolkovsky API v1'
 
-# User endpoints
-from fyodorov_utils.auth.endpoints import users_app
-app.mount('/users', users_app)
-
 @app.get('/health')
 @error_handler
 def health_check():
     return 'OK'
 
+# User endpoints
+from fyodorov_utils.auth.endpoints import users_app
+app.mount('/users', users_app)
+
+# Tools endpoints
 @app.get('/.well-known/{name}.json')
 @error_handler
 def get_plugin_well_known(name: str):
     plugin = Plugin.get_plugin(name)
     return plugin
 
-# Tools endpoints
 @app.post('/tools')
 @error_handler
 def create_tool(tool: ToolModel, user = Depends(authenticate)):
