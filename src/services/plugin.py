@@ -1,3 +1,8 @@
+from pydantic import BaseModel
+from models.plugin import PluginModel
+from fyodorov_utils.config.supabase import get_supabase
+
+supabase = get_supabase()
 
 class Plugin(BaseModel):
     plugin: PluginModel

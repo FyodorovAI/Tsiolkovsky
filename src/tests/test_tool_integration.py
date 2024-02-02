@@ -2,7 +2,7 @@ import pytest
 from models.tool import ToolModel
 from services.tool import Tool
 from tests.test_tool_model import get_default_tool
-from config.config import Settings
+from fyodorov_utils.config.config import Settings
 
 @pytest.fixture
 async def tool_fixture() -> tuple[ToolModel, str]:

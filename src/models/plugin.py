@@ -1,4 +1,5 @@
-from typing import Literal, TypedDict
+from typing import Literal
+from typing_extensions import TypedDict
 from pydantic import BaseModel, HttpUrl
 
 APIUrlTypes = Literal['openapi', 'graphql', 'graphql_ws', 'rest']
@@ -25,7 +26,7 @@ output = {
     "api": {
         "type": "openapi",
         "url": "http://example.com",
-        "has_user_authentication": false
+        "has_user_authentication": False
     },
     "logo_url": "http://logo.url",
     "contact_email": "contact@example.com",

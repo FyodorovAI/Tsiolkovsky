@@ -5,7 +5,7 @@ from tests.test_hc_model import get_default_hc
 from tests.test_tool_model import get_default_tool
 from models.tool import ToolModel
 from services.tool import Tool
-from config.config import Settings
+from fyodorov_utils.config.config import Settings
 
 @pytest.fixture
 async def hc_fixture() -> HealthUpdate:

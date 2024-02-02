@@ -3,9 +3,7 @@ from pydantic import BaseModel, EmailStr
 from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from starlette.status import HTTP_403_FORBIDDEN
 from datetime import datetime, timedelta
-import jwt
 from typing import List
 import uvicorn
 
@@ -16,11 +14,9 @@ from services.tool import Tool
 from services.health_check import HealthUpdate
 from models.tool import ToolModel
 from models.health_check import HealthUpdateModel
-from config.supabase import get_supabase
-from config.config import Settings
+from services.plugin import Plugin
 
-app = FastAPI()
-supabase = get_supabase()
+app = FastAPI(title="Tsiolkovsky", description="A service for managing agent tools", version="0.0.1")
 
 
 # Tsiolkovsky API
@@ -53,7 +49,7 @@ def create_tool(tool: ToolModel, user = Depends(authenticate)):
 
 @app.get('/tools')
 @error_handler
-def get_tools(user = Depends(authenticate), limit: int = 10, created_at_lt: datetime = datetime.now()):    
+def get_tools(limit: int = 10, created_at_lt: datetime = datetime.now(), user = Depends(authenticate)):    
     return Tool.get_all_in_db(limit = limit, created_at_lt = created_at_lt)
 
 @app.get('/tools/{id}')

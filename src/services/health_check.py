@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import re
 from models.health_check import HealthUpdateModel
 from supabase import  Client
-from config.supabase import get_supabase
+from fyodorov_utils.config.supabase import get_supabase
 
 supabase: Client = get_supabase()
 

@@ -23,7 +23,7 @@
 
 -----
 
-Tsiolkovsky is a service for managing tools. Your agents can use these tools to learn and act on the world around them.
+Tsiolkovsky is a service for managing agent tools. Your agents can use these tools to learn and act on the world around them.
 Enjoy exploring!
 
 -----
