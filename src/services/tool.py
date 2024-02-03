@@ -8,8 +8,9 @@ supabase: Client = get_supabase()
 
 class Tool():
     @staticmethod    
-    def create_in_db(tool: ToolModel) -> str:
+    def create_in_db(tool: ToolModel, access_token: str) -> str:
         try:
+            supabase.auth.set_access_token(access_token)
             result = supabase.table('tools').insert(tool.to_dict()).execute()
             tool_id = result.data[0]['id']
             return tool_id

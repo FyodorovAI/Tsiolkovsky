@@ -38,13 +38,13 @@ app.mount('/users', users_app)
 @app.get('/.well-known/{name}.json')
 @error_handler
 def get_plugin_well_known(name: str):
-    plugin = Plugin.get_plugin(name)
-    return plugin
+    return Plugin.get_plugin(name)
 
 @app.post('/tools')
 @error_handler
 def create_tool(tool: ToolModel, user = Depends(authenticate)):
-    Tool.create_in_db(tool)
+    print(f"User: {user}")
+    Tool.create_in_db(tool, user['session_id'])
     return tool
 
 @app.get('/tools')
@@ -57,11 +57,6 @@ def get_tools(limit: int = 10, created_at_lt: datetime = datetime.now(), user = 
 def get_tool(id: str, user = Depends(authenticate)):
     return Tool.get_in_db(id)
 
-@app.post('/tools/{id}/health')
-@error_handler
-def create_health_update(id: str, health_update: HealthUpdateModel, user = Depends(authenticate)):
-    return HealthUpdate.save_health_check(health_update)
-
 @app.put('/tools/{id}')
 @error_handler
 def update_tool(id: str, tool: ToolModel, user = Depends(authenticate)):
@@ -73,18 +68,19 @@ def delete_tool(id: str, user = Depends(authenticate)):
     return Tool.delete_in_db(id)
 
 # Health check endpoints
-@app.get('/tools/{id}/health')
-@error_handler
-def get_health_updates(id: str, user = Depends(authenticate)):
-    HealthUpdate.get_health_checks(id)
-
 @app.post('/tools/{id}/health')
 @error_handler
 def create_health_update(id: str, health_update: HealthUpdateModel, user = Depends(authenticate)):
     if id == health_update.tool_id:
-        return HealthUpdate.save_health_check(health_update)
+        print(f"Updating tool {id} with health update: {health_update}")
+        health = HealthUpdate(
+            tool_id = health_update.tool_id,
+            health_status = health_update.health_status,
+            api_url = health_update.api_url,
+        )
+        return health.save_health_check()
     else:
-        raise HTTPException(status_code=400, detail="Tool ID does not match health update tool ID")
+        raise HTTPException(status_code=400, detail="Tool ID in URL does not match health update tool ID")
 
 @app.get('/tools/{id}/health')
 @error_handler

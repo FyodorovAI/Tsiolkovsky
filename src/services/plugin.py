@@ -4,18 +4,14 @@ from fyodorov_utils.config.supabase import get_supabase
 
 supabase = get_supabase()
 
-class Plugin(BaseModel):
-    plugin: PluginModel
+class Plugin(PluginModel):    
 
-    def to_dict(self) -> dict:
-        return self.plugin.to_dict()
-    
     @staticmethod
-    def get_plugin(name: str) -> PluginModel:
+    def get_plugin(name: str) -> 'Plugin':
         try:
             result = supabase.table('plugins').select('*').eq('name_for_model', name).limit(1).single().execute()
             plugin = PluginModel.from_table(result.data)
-            return plugin
+            return Plugin(**plugin.dict())
         except Exception as e:
             print('Error getting plugin', str(e))
             raise e
