@@ -1,16 +1,13 @@
 from models.tool import ToolModel
 from typing import Union
 from datetime import datetime, timedelta
-from supabase import  Client
 from fyodorov_utils.config.supabase import get_supabase
-
-supabase: Client = get_supabase()
 
 class Tool():
     @staticmethod    
-    def create_in_db(tool: ToolModel, access_token: str) -> str:
+    def create_in_db(access_token: str, tool: ToolModel) -> str:
         try:
-            supabase.auth.set_access_token(access_token)
+            supabase = get_supabase(access_token)
             result = supabase.table('tools').insert(tool.to_dict()).execute()
             tool_id = result.data[0]['id']
             return tool_id
@@ -19,10 +16,11 @@ class Tool():
             raise e
 
     @staticmethod
-    def update_in_db(id: str, tool: dict) -> dict:
+    def update_in_db(access_token: str, id: str, tool: dict) -> dict:
         if not id:
             raise ValueError('Tool ID is required')
         try:
+            supabase = get_supabase(access_token)
             result = supabase.table('tools').update(tool).eq('id', id).execute()
             return result.data[0]
         except Exception as e:
@@ -30,10 +28,11 @@ class Tool():
             raise
 
     @staticmethod
-    def delete_in_db(id: str) -> bool:
+    def delete_in_db(access_token: str, id: str) -> bool:
         if not id:
             raise ValueError('Tool ID is required')
         try:
+            supabase = get_supabase(access_token)
             result = supabase.table('tools').delete().eq('id', id).execute()
             return True
         except Exception as e:
@@ -41,10 +40,11 @@ class Tool():
             raise e
 
     @staticmethod
-    def get_in_db(id: str) -> dict:
+    def get_in_db(access_token: str, id: str) -> dict:
         if not id:
             raise ValueError('Tool ID is required')
         try:
+            supabase = get_supabase(access_token)
             result = supabase.table('tools').select('*').eq('id', id).limit(1).execute()
             tool = result.data[0]
             return tool
@@ -53,8 +53,9 @@ class Tool():
             raise e
 
     @staticmethod
-    def get_all_in_db(limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
+    def get_all_in_db(access_token: str, limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
         try:
+            supabase = get_supabase(access_token)
             result = supabase.from_('tools') \
                 .select("*") \
                 .limit(limit) \
