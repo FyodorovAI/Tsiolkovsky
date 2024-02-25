@@ -1,18 +1,20 @@
 from fastapi import FastAPI, Depends, HTTPException, Security, Body, HTTPException, Request
 from pydantic import BaseModel, EmailStr
 from fastapi.exceptions import HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import Header
 from datetime import datetime, timedelta
 from typing import List
 import uvicorn
+import yaml
 
 from fyodorov_utils.auth.auth import authenticate
 from fyodorov_utils.decorators.logging import error_handler
 
 from services.tool import Tool
 from services.health_check import HealthUpdate
-from models.tool import ToolModel
+from fyodorov_llm_agents.tools.tool import Tool as ToolModel
 from models.health_check import HealthUpdateModel
 from services.plugin import Plugin
 
@@ -35,10 +37,53 @@ from fyodorov_utils.auth.endpoints import users_app
 app.mount('/users', users_app)
 
 # Tools endpoints
-@app.get('/.well-known/{name}.json')
+@app.get('/.well-known/{user_id}/{name}.json')
 @error_handler
-def get_plugin_well_known(name: str):
-    return Plugin.get_plugin(name)
+async def get_plugin_well_known(user_id: str, name: str, authorization: str = Header(None)):
+    user = None
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            token = authorization.split(" ")[1]
+            creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+            user = await authenticate(creds)
+            print(f"User: {user}")
+        except Exception as e:
+            print("User not found", e)
+    if user:
+        return Tool.get_by_user_and_name_in_db(user['session_id'], user_id, name).to_plugin()
+    else:
+        return Tool.get_by_user_and_name_in_db(None, user_id, name).to_plugin()
+
+@app.get('/.well-known/{user_id}/{name}.yaml')
+@error_handler
+async def get_plugin_well_known(user_id: str, name: str, authorization: str = Header(None)):
+    user = None
+    if authorization and authorization.startswith("Bearer "):
+        try:
+            token = authorization.split(" ")[1]
+            creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
+            user = await authenticate(creds)
+            print(f"User: {user}")
+        except Exception as e:
+            print("User not found", e)
+    if user:
+        tool_dict = Tool.get_by_user_and_name_in_db(user['session_id'], user_id, name).to_plugin()
+    else:
+        tool_dict = Tool.get_by_user_and_name_in_db(None, user_id, name).to_plugin()
+    yaml_str = yaml.dump(tool_dict)
+    return Response(content=yaml_str, media_type="application/x-yaml")
+
+@app.post('/tools/yaml')
+@error_handler
+async def create_tool_from_yaml(request: Request, user = Depends(authenticate)):
+    try:
+        tool_yaml = await request.body()
+        tool = ToolModel.from_yaml(tool_yaml)
+        Tool.create_in_db(user['session_id'], tool, user['sub'])
+        return tool
+    except Exception as e:
+        print('Error creating tool from yaml', str(e))
+        raise HTTPException(status_code=400, detail="Invalid YAML format")
 
 @app.post('/tools')
 @error_handler
@@ -46,6 +91,12 @@ def create_tool(tool: ToolModel, user = Depends(authenticate)):
     print(f"User: {user}")
     Tool.create_in_db(user['session_id'], tool)
     return tool
+
+@app.post('/tools/from-plugin')
+@error_handler
+def create_tool_from_plugin(plugin: dict, user = Depends(authenticate)):
+    print(f"Plugin: {plugin}")
+    return Tool.create_from_plugin(user['session_id'], plugin["plugin_url"])
 
 @app.get('/tools')
 @error_handler

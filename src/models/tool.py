@@ -45,6 +45,26 @@ class ToolModel(BaseModel):
             'legal_info_url': str(self.legal_info_url)
         }
 
+    def to_plugin(self) -> dict:
+        return {
+            'name_for_model': self.name_for_ai,
+            'name_for_human': self.name_for_human,
+            'description_for_model': self.description_for_ai,
+            'description_for_human': self.description_for_human,
+            'auth': {
+                'type': 'user_http',
+                'authorization_type': 'bearer'
+            },
+            'api': {
+                'type': self.api_type,
+                'url': str(self.api_url),
+                'has_user_authentication': False
+            },
+            'logo_url': str(self.logo_url),
+            'contact_email': str(self.contact_email),
+            'legal_info_url': str(self.legal_info_url)
+        }
+
     @staticmethod
     def validate_name_for_human(name_for_human: str) -> str:
         if not name_for_human:
