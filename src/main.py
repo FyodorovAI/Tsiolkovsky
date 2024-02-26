@@ -20,7 +20,6 @@ from services.plugin import Plugin
 
 app = FastAPI(title="Tsiolkovsky", description="A service for managing agent tools", version="0.0.1")
 
-
 # Tsiolkovsky API
 @app.get('/')
 @error_handler

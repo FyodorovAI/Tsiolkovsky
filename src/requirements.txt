@@ -9,5 +9,5 @@ PyJWT
 asyncio
 requests
 pyyaml
-fyodorov_utils==0.2.71
+fyodorov_utils==0.2.78
 fyodorov_llm_agents==0.0.108
