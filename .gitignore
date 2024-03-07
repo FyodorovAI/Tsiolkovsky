@@ -5,3 +5,4 @@ __pycache__
 *.tgz
 venv
 scripts/custom-values.yaml
+.DS_Store
