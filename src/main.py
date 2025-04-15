@@ -11,10 +11,7 @@ from fyodorov_utils.auth.auth import authenticate
 from fyodorov_utils.decorators.logging import error_handler
 
 from services.tool_v2 import MCPTool as Tool
-from services.health_check import HealthUpdate
 from fyodorov_llm_agents.tools.mcp_tool import MCPTool as ToolModel
-from models.health_check import HealthUpdateModel
-from services.plugin import Plugin
 from api_v1 import api_v1
 
 app = FastAPI(title="Tsiolkovsky", description="A service for managing agent tools", version="0.0.1")

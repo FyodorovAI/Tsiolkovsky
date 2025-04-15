@@ -2,7 +2,7 @@ from datetime import datetime
 from fyodorov_utils.config.supabase import get_supabase
 from fyodorov_llm_agents.tools.mcp_tool import MCPTool as ToolModel
 
-class Tool():
+class MCPTool():
     @staticmethod    
     def create_in_db(access_token: str, tool: ToolModel, user_id: str) -> str:
         try:
