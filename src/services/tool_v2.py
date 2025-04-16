@@ -71,6 +71,7 @@ class MCPTool():
     def get_all_in_db(access_token: str, user_id: str, limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
         try:
             supabase = get_supabase(access_token)
+            print('got supabase for getting tools', supabase)
             result = supabase.from_('mcp_tools') \
                 .select("*") \
                 .limit(limit) \
@@ -78,6 +79,7 @@ class MCPTool():
                 .order('created_at', desc=True) \
                 .or_(f"public.eq.true,user_id.eq.{user_id!r}")\
                 .execute()
+            print('got tools from db', result)
             tools = result.data
             return tools
         except Exception as e:
