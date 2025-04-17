@@ -112,6 +112,12 @@ class MCPTool():
         try:
             supabase = get_supabase(access_token)
             for agent_id in agent_ids:
+                # Check if agent is valid and exists in the database
+                agent_result = supabase.table('agents').select('*').eq('id', agent_id).limit(1).execute()
+                if not agent_result.data:
+                    print(f"Agent with ID {agent_id} does not exist.")
+                    continue
+                # Insert the agent-tool relationship
                 supabase.table('agent_mcp_tool').insert({'mcp_tool_id': id, 'agent_id': agent_id}).execute()
             print('Inserted tool agents', agent_ids)
             return agent_ids

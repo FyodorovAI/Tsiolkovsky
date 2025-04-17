@@ -89,7 +89,7 @@ def get_tool_agents(id: str, user = Depends(authenticate)):
 
 @app.post('/tools/{id}/agents')
 @error_handler
-def set_tool_agents(id: str, agent_ids: list[str],user = Depends(authenticate)):
+def set_tool_agents(id: str, agent_ids: list[int],user = Depends(authenticate)):
     return Tool.set_tool_agents(user['session_id'], id, agent_ids)
 
 @app.put('/tools/{id}')
