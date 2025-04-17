@@ -9,6 +9,9 @@ class MCPTool():
             supabase = get_supabase(access_token)
             tool_dict = tool.to_dict()
             tool_dict['user_id'] = user_id
+            del tool_dict['id']
+            del tool_dict['created_at']
+            del tool_dict['updated_at']
             print('creating tool in db', tool_dict)
             result = supabase.table('mcp_tools').insert(tool_dict).execute()
             tool_id = result.data[0]['id']
