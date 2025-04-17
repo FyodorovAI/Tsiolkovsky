@@ -26,6 +26,7 @@ class MCPTool():
             raise ValueError('Tool ID is required')
         try:
             supabase = get_supabase(access_token)
+            print('updating tool in db', tool)
             result = supabase.table('mcp_tools').update(tool).eq('id', id).execute()
             return result.data[0]
         except Exception as e:
