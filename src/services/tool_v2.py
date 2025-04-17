@@ -104,3 +104,17 @@ class MCPTool():
         except Exception as e:
             print('Error fetching tool agents', str(e))
             raise
+
+    @staticmethod
+    def set_tool_agents(access_token: str, id: str, agent_ids: list[int]) -> list[int]:
+        if not id:
+            raise ValueError('Tool ID is required')
+        try:
+            supabase = get_supabase(access_token)
+            for agent_id in agent_ids:
+                supabase.table('agent_mcp_tool').insert({'mcp_tool_id': id, 'agent_id': agent_id}).execute()
+            print('Inserted tool agents', agent_ids)
+            return agent_ids
+        except Exception as e:
+            print('Error setting tool agents', str(e))
+            raise
