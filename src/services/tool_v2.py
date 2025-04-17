@@ -72,12 +72,13 @@ class MCPTool():
         try:
             supabase = get_supabase(access_token)
             print('got supabase for getting tools', supabase)
+            print('getting tools from db for user', user_id)
             result = supabase.from_('mcp_tools') \
                 .select("*") \
                 .limit(limit) \
                 .lt('created_at', created_at_lt) \
                 .order('created_at', desc=True) \
-                .or_(f"public.eq.true,user_id.eq.{user_id!r}")\
+                .or_(f"public.eq.true,user_id.eq.{user_id}")\
                 .execute()
             print('got tools from db', result)
             tools = result.data

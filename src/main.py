@@ -68,7 +68,8 @@ async def create_tool_from_yaml(request: Request, user = Depends(authenticate)):
 @error_handler
 def create_tool(tool: ToolModel, user = Depends(authenticate)):
     print(f"User: {user}")
-    Tool.create_in_db(user['session_id'], tool)
+    # Pass the authenticated user's ID when creating the tool in the database
+    Tool.create_in_db(user['session_id'], tool, user['sub'])
     return tool
 
 @app.get('/tools')
