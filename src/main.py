@@ -3,6 +3,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse, Response
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi import Header
+from pydantic import BaseModel
 from datetime import datetime
 import uvicorn
 import yaml
@@ -87,10 +88,13 @@ def get_tool(id: str, user = Depends(authenticate)):
 def get_tool_agents(id: str, user = Depends(authenticate)):
     return Tool.get_tool_agents(user['session_id'], id)
 
+class AgentIDsRequest(BaseModel):
+    agent_ids: list[int]
+
 @app.post('/tools/{id}/agents')
 @error_handler
-def set_tool_agents(id: str, agent_ids: list[int],user = Depends(authenticate)):
-    return Tool.set_tool_agents(user['session_id'], id, agent_ids)
+def set_tool_agents(id: str, payload: AgentIDsRequest,user = Depends(authenticate)):
+    return Tool.set_tool_agents(user['session_id'], id, payload.agent_ids)
 
 @app.put('/tools/{id}')
 @error_handler
