@@ -74,7 +74,7 @@ class MCPTool():
             raise e
 
     @staticmethod
-    def get_all_in_db(access_token: str, user_id: str, limit: int = 10, created_at_lt: datetime = datetime.now()) -> [dict]:
+    def get_all_in_db(access_token: str, user_id: str, limit: int = 10, created_at_lt: datetime = datetime.now()) -> list[dict]:
         try:
             supabase = get_supabase(access_token)
             print('got supabase for getting tools', supabase)
@@ -91,3 +91,16 @@ class MCPTool():
         except Exception as e:
             print('Error fetching tools', str(e))
             raise e
+
+    @staticmethod
+    def get_tool_agents(access_token: str, id: str) -> list[int]:
+        if not id:
+            raise ValueError('Tool ID is required')
+        try:
+            supabase = get_supabase(access_token)
+            result = supabase.table('agent_mcp_tool').select('*').eq('mcp_tool_id', id).execute()
+            tool_agents = [item['agent_id'] for item in result.data if 'agent_id' in item]
+            return tool_agents
+        except Exception as e:
+            print('Error fetching tool agents', str(e))
+            raise

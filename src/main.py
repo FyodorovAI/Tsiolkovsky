@@ -82,6 +82,11 @@ def get_tools(limit: int = 10, created_at_lt: datetime = datetime.now(), user = 
 def get_tool(id: str, user = Depends(authenticate)):
     return Tool.get_in_db(user['session_id'], id)
 
+@app.get('/tools/{id}/agents')
+@error_handler
+def get_tool(id: str, user = Depends(authenticate)):
+    return Tool.get_tool_agents(user['session_id'], id)
+
 @app.put('/tools/{id}')
 @error_handler
 def update_tool(id: str, tool: ToolModel, user = Depends(authenticate)):
