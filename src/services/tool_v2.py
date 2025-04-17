@@ -82,7 +82,6 @@ class MCPTool():
                 .limit(limit) \
                 .lt('created_at', created_at_lt) \
                 .order('created_at', desc=True) \
-                .or_(f"public.eq.true,user_id.eq.{user_id}")\
                 .execute()
             print('got tools from db', result)
             tools = result.data
