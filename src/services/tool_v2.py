@@ -65,7 +65,7 @@ class MCPTool():
     def get_by_user_and_name_in_db(access_token: str, user_id: str, name: str) -> ToolModel:
         try:
             supabase = get_supabase(access_token)
-            result = supabase.table('mcp_tools').select('*').eq('user_id', user_id).eq('display_name', name).limit(1).execute()
+            result = supabase.table('mcp_tools').select('*').eq('user_id', user_id).eq('name', name).limit(1).execute()
             tool_dict = result.data[0]
             tool = ToolModel(**tool_dict)
             return tool
