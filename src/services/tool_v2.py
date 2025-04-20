@@ -79,14 +79,22 @@ class MCPTool():
             supabase = get_supabase(access_token)
             print('got supabase for getting tools', supabase)
             print('getting tools from db for user', user_id)
+            tools = []
             result = supabase.from_('mcp_tools') \
                 .select("*") \
                 .limit(limit) \
                 .lt('created_at', created_at_lt) \
                 .order('created_at', desc=True) \
                 .execute()
-            print('got tools from db', result)
-            tools = result.data
+            for tool in result.data:
+                tool["id"] = str(tool["id"])
+                tool["user_id"] = str(tool["user_id"])
+                tool["created_at"] = str(tool["created_at"])
+                tool["updated_at"] = str(tool["updated_at"])
+                if tool and (tool['public'] == True or tool['user_id'] == user_id):
+                    print('tool is public or belongs to user', tool)
+                    tools.append(tool)
+            print('got tools from db', len(tools))
             return tools
         except Exception as e:
             print('Error fetching tools', str(e))
