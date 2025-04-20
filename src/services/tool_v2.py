@@ -74,10 +74,9 @@ class MCPTool():
             raise e
 
     @staticmethod
-    def get_all_in_db(access_token: str, user_id: str, limit: int = 10, created_at_lt: datetime = datetime.now()) -> list[dict]:
+    def get_all_in_db(access_token: str, user_id: str = None, limit: int = 10, created_at_lt: datetime = datetime.now()) -> list[dict]:
         try:
             supabase = get_supabase(access_token)
-            print('got supabase for getting tools', supabase)
             print('getting tools from db for user', user_id)
             tools = []
             result = supabase.from_('mcp_tools') \
@@ -91,7 +90,7 @@ class MCPTool():
                 tool["user_id"] = str(tool["user_id"])
                 tool["created_at"] = str(tool["created_at"])
                 tool["updated_at"] = str(tool["updated_at"])
-                if tool and (tool['public'] == True or tool['user_id'] == user_id):
+                if tool and (tool['public'] == True or (user_id and 'user_id' in tool and tool['user_id'] == user_id)):
                     print('tool is public or belongs to user', tool)
                     tools.append(tool)
             print('got tools from db', len(tools))
