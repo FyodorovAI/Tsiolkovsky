@@ -10,4 +10,4 @@ asyncio
 requests
 pyyaml
 fyodorov_utils==0.3.15
-fyodorov_llm_agents==0.3.3
+fyodorov_llm_agents==0.3.4
