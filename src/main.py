@@ -76,7 +76,7 @@ def create_tool(tool: ToolModel, user = Depends(authenticate)):
 @app.get('/tools')
 @error_handler
 def get_tools(limit: int = 10, created_at_lt: datetime = datetime.now(), user = Depends(authenticate)):    
-    return Tool.get_all_in_db(user['session_id'], user['sub'], limit = limit, created_at_lt = created_at_lt)
+    return Tool.get_all_in_db(user['sub'], limit = limit, created_at_lt = created_at_lt)
 
 @app.get('/tools/{id}')
 @error_handler

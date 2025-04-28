@@ -101,7 +101,7 @@ def create_tool_from_plugin(plugin: dict, user = Depends(authenticate)):
 @api_v1.get('/tools')
 @error_handler
 def get_tools(limit: int = 10, created_at_lt: datetime = datetime.now(), user = Depends(authenticate)):    
-    return Tool.get_all_in_db(user['session_id'], limit = limit, created_at_lt = created_at_lt)
+    return Tool.get_all_in_db(limit = limit, created_at_lt = created_at_lt)
 
 @api_v1.get('/tools/{id}')
 @error_handler
