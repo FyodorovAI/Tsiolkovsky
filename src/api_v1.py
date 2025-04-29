@@ -7,16 +7,16 @@ from fastapi import (
     FastAPI,
     Header,
     HTTPException,
-    JSONResponse,
     Request,
     Response,
 )
 from fastapi.security import HTTPAuthorizationCredentials
-from fyodorov_llm_agents.tools.tool import Tool as ToolModel
-from fyodorov_utils.auth.auth import authenticate
+from fastapi.responses import JSONResponse
 
 # User endpoints
 from fyodorov_utils.auth.endpoints import users_app
+from fyodorov_llm_agents.tools.tool import Tool as ToolModel
+from fyodorov_utils.auth.auth import authenticate
 from fyodorov_utils.decorators.logging import error_handler
 from models.health_check import HealthUpdateModel
 from services.health_check import HealthUpdate
