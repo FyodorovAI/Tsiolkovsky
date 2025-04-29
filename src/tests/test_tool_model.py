@@ -1,18 +1,19 @@
 import pytest
-from models.tool import ToolModel 
+from models.tool import ToolModel
 from pydantic import ValidationError
 
+
 def get_default_tool(
-        name_for_human="My Tool",
-        name_for_ai="my-tool",
-        description_for_human="This is my tool.",
-        description_for_ai="This is my tool.",
-        api_type="openapi",
-        api_url="https://example.com/openapi.json",
-        logo_url="https://example.com/logo.png",
-        contact_email="I7JQK@example.com",
-        legal_info_url="https://example.com/legal-info.pdf",
-    ) -> ToolModel:
+    name_for_human="My Tool",
+    name_for_ai="my-tool",
+    description_for_human="This is my tool.",
+    description_for_ai="This is my tool.",
+    api_type="openapi",
+    api_url="https://example.com/openapi.json",
+    logo_url="https://example.com/logo.png",
+    contact_email="I7JQK@example.com",
+    legal_info_url="https://example.com/legal-info.pdf",
+) -> ToolModel:
 
     try:
         tool = ToolModel(
@@ -33,6 +34,7 @@ def get_default_tool(
         print("Tool model:", tool)
         return tool
 
+
 def test_default_tool_validation():
     # Get a tool by calling get_default_tool()
     tool = get_default_tool()
@@ -40,9 +42,7 @@ def test_default_tool_validation():
     # Validate the tool and get a boolean indicating if it is valid
     is_valid = tool.validate()
 
-    assert is_valid, (
-        "Default tool should be valid"
-    )
+    assert is_valid, "Default tool should be valid"
 
 
 def test_long_name_for_human():
@@ -68,7 +68,9 @@ def test_long_description_for_human():
 
 def test_invalid_description_for_human():
     # Create a tool with an invalid description for human
-    invalid_description_tool = get_default_tool(description_for_human="This is my tool @!")
+    invalid_description_tool = get_default_tool(
+        description_for_human="This is my tool @!"
+    )
     is_valid = invalid_description_tool.validate()
     assert not is_valid, "Invalid description for human should result in invalid tool"
 

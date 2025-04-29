@@ -1,18 +1,17 @@
 import pytest
-from models.health_check import HealthUpdateModel, HealthStatusTypes
-from pydantic import ValidationError, HttpUrl
+from models.health_check import HealthStatusTypes, HealthUpdateModel
+from pydantic import HttpUrl, ValidationError
+
 
 def get_default_hc(
-        tool_id: str | None = "5",
-        health_status: HealthStatusTypes = "healthy",
-        api_url: HttpUrl | None = HttpUrl('http://www.example.com')
-    ) -> HealthUpdateModel:
+    tool_id: str | None = "5",
+    health_status: HealthStatusTypes = "healthy",
+    api_url: HttpUrl | None = HttpUrl("http://www.example.com"),
+) -> HealthUpdateModel:
 
     try:
         hc = HealthUpdateModel(
-            tool_id=tool_id,
-            health_status=health_status,
-            api_url=api_url
+            tool_id=tool_id, health_status=health_status, api_url=api_url
         )
     except ValidationError as e:
         print("Health update model validation error:", e)
@@ -20,6 +19,7 @@ def get_default_hc(
     else:
         print("Health update model:", hc)
         return hc
+
 
 def test_default_hc_validation():
     try:
@@ -29,6 +29,7 @@ def test_default_hc_validation():
     else:
         assert True, "No exception should be thrown"
 
+
 def test_invalid_hc_validation():
     try:
         get_default_hc(health_status="invalid")
@@ -36,6 +37,7 @@ def test_invalid_hc_validation():
         assert True, f"An exception should be thrown: {e}"
     else:
         assert False, "An exception should be thrown"
+
 
 def test_invalid_tool_id():
     try:
@@ -45,8 +47,9 @@ def test_invalid_tool_id():
     else:
         assert False, "An exception should be thrown"
 
+
 def test_invalid_api_url():
-    invalid_urls = ['invalid-url', 'ftp://invalid-url', 'localhost:8000']
+    invalid_urls = ["invalid-url", "ftp://invalid-url", "localhost:8000"]
     for invalid_url in invalid_urls:
         try:
             print(f"Testing invalid URL: {invalid_url}")
