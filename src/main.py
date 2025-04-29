@@ -14,14 +14,12 @@ from fyodorov_utils.auth.endpoints import users_app
 from fyodorov_utils.decorators.logging import error_handler
 from pydantic import BaseModel
 
-from api_v1 import api_v1
 
 app = FastAPI(
     title="Tsiolkovsky",
     description="A service for managing agent tools",
     version="0.0.1",
 )
-app.mount("/v1", api_v1)
 app.mount("/users", users_app)
 
 
