@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY ./src/requirements.txt .
 
+RUN uv env
+
 RUN uv pip install --no-cache-dir -r requirements.txt
 
 RUN uv pip install fyodorov_utils==0.3.17
