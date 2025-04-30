@@ -9,3 +9,4 @@ PyJWT
 asyncio
 requests
 pyyaml
+litellm
