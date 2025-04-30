@@ -14,7 +14,6 @@ from fyodorov_utils.auth.endpoints import users_app
 from fyodorov_utils.decorators.logging import error_handler
 from pydantic import BaseModel
 
-
 app = FastAPI(
     title="Tsiolkovsky",
     description="A service for managing agent tools",
@@ -124,6 +123,7 @@ def update_tool(id: str, tool: ToolModel, user=Depends(authenticate)):
 @app.delete("/tools/{id}")
 @error_handler
 def delete_tool(id: str, user=Depends(authenticate)):
+    print(f"Got request to delete tool {id}")
     return Tool.delete_in_db(user["session_id"], id)
 
 
