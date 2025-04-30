@@ -1,18 +1,19 @@
 from datetime import datetime
-
 import uvicorn
 import yaml
+from pydantic import BaseModel
+
 from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.responses import JSONResponse, Response
 from fastapi.security import HTTPAuthorizationCredentials
 from fyodorov_llm_agents.tools.mcp_tool_model import MCPTool as ToolModel
 from fyodorov_llm_agents.tools.mcp_tool_service import MCPTool as Tool
-from fyodorov_utils.auth.auth import authenticate
 
 # User endpoints
 from fyodorov_utils.auth.endpoints import users_app
 from fyodorov_utils.decorators.logging import error_handler
-from pydantic import BaseModel
+from fyodorov_utils.services.yaml import app as yaml_app
+from fyodorov_utils.auth.auth import authenticate
 
 app = FastAPI(
     title="Tsiolkovsky",
@@ -20,7 +21,7 @@ app = FastAPI(
     version="0.0.1",
 )
 app.mount("/users", users_app)
-
+app.mount("/yaml", yaml_app)
 
 # Tsiolkovsky API
 @app.get("/")
