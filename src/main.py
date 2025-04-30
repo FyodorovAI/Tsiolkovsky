@@ -25,13 +25,13 @@ app.mount("/users", users_app)
 # Tsiolkovsky API
 @app.get("/")
 @error_handler
-def root():
+async def root():
     return "Tsiolkovsky API v2"
 
 
 @app.get("/health")
 @error_handler
-def health_check():
+async def health_check():
     return "OK"
 
 
@@ -51,11 +51,11 @@ async def get_plugin_well_known(
         except Exception as e:
             print("User not found", e)
     if user:
-        tool_dict = Tool.get_by_user_and_name_in_db(
+        tool_dict = await Tool.get_by_user_and_name_in_db(
             user["session_id"], user_id, name
         ).to_plugin()
     else:
-        tool_dict = Tool.get_by_user_and_name_in_db(None, user_id, name).to_plugin()
+        tool_dict = await Tool.get_by_user_and_name_in_db(None, user_id, name).to_plugin()
     yaml_str = yaml.dump(tool_dict)
     return Response(content=yaml_str, media_type="application/x-yaml")
 
@@ -66,7 +66,7 @@ async def create_tool_from_yaml(request: Request, user=Depends(authenticate)):
     try:
         tool_yaml = await request.body()
         tool = ToolModel.from_yaml(tool_yaml)
-        Tool.create_in_db(user["session_id"], tool, user["sub"])
+        await Tool.create_in_db(user["session_id"], tool, user["sub"])
         return tool
     except Exception as e:
         print("Error creating tool from yaml", str(e))
@@ -75,33 +75,33 @@ async def create_tool_from_yaml(request: Request, user=Depends(authenticate)):
 
 @app.post("/tools")
 @error_handler
-def create_tool(tool: ToolModel, user=Depends(authenticate)):
+async def create_tool(tool: ToolModel, user=Depends(authenticate)):
     print(f"User: {user}")
     # Pass the authenticated user's ID when creating the tool in the database
-    Tool.create_in_db(user["session_id"], tool, user["sub"])
+    tool = await Tool.create_in_db(user["session_id"], tool, user["sub"])
     return tool
 
 
 @app.get("/tools")
 @error_handler
-def get_tools(
+async def get_tools(
     limit: int = 10,
     created_at_lt: datetime = datetime.now(),
     user=Depends(authenticate),
 ):
-    return Tool.get_all_in_db(user["sub"], limit=limit, created_at_lt=created_at_lt)
+    return await Tool.get_all_in_db(user["sub"], limit=limit, created_at_lt=created_at_lt)
 
 
 @app.get("/tools/{id}")
 @error_handler
-def get_tool(id: str, user=Depends(authenticate)):
-    return Tool.get_in_db(user["session_id"], id)
+async def get_tool(id: str, user=Depends(authenticate)):
+    return await Tool.get_in_db(user["session_id"], id)
 
 
 @app.get("/tools/{id}/agents")
 @error_handler
-def get_tool_agents(id: str, user=Depends(authenticate)):
-    return Tool.get_tool_agents(user["session_id"], id)
+async def get_tool_agents(id: str, user=Depends(authenticate)):
+    return await Tool.get_tool_agents(user["session_id"], id)
 
 
 class AgentIDsRequest(BaseModel):
@@ -110,21 +110,21 @@ class AgentIDsRequest(BaseModel):
 
 @app.post("/tools/{id}/agents")
 @error_handler
-def set_tool_agents(id: str, payload: AgentIDsRequest, user=Depends(authenticate)):
-    return Tool.set_tool_agents(user["session_id"], id, payload.agent_ids)
+async def set_tool_agents(id: str, payload: AgentIDsRequest, user=Depends(authenticate)):
+    return await Tool.set_tool_agents(user["session_id"], id, payload.agent_ids)
 
 
 @app.put("/tools/{id}")
 @error_handler
-def update_tool(id: str, tool: ToolModel, user=Depends(authenticate)):
-    return Tool.update_in_db(user["session_id"], id, tool)
+async def update_tool(id: str, tool: ToolModel, user=Depends(authenticate)):
+    return await Tool.update_in_db(user["session_id"], id, tool)
 
 
 @app.delete("/tools/{id}")
 @error_handler
-def delete_tool(id: str, user=Depends(authenticate)):
+async def delete_tool(id: str, user=Depends(authenticate)):
     print(f"Got request to delete tool {id}")
-    return Tool.delete_in_db(user["session_id"], id)
+    return await Tool.delete_in_db(user["session_id"], id)
 
 
 # Oauth endpoints
