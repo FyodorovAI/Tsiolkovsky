@@ -23,6 +23,7 @@ app = FastAPI(
 app.mount("/users", users_app)
 app.mount("/yaml", yaml_app)
 
+
 # Tsiolkovsky API
 @app.get("/")
 @error_handler
@@ -56,7 +57,9 @@ async def get_plugin_well_known(
             user["session_id"], user_id, name
         ).to_plugin()
     else:
-        tool_dict = await Tool.get_by_user_and_name_in_db(None, user_id, name).to_plugin()
+        tool_dict = await Tool.get_by_user_and_name_in_db(
+            None, user_id, name
+        ).to_plugin()
     yaml_str = yaml.dump(tool_dict)
     return Response(content=yaml_str, media_type="application/x-yaml")
 
@@ -90,7 +93,9 @@ async def get_tools(
     created_at_lt: datetime = datetime.now(),
     user=Depends(authenticate),
 ):
-    return await Tool.get_all_in_db(user["sub"], limit=limit, created_at_lt=created_at_lt)
+    return await Tool.get_all_in_db(
+        user["sub"], limit=limit, created_at_lt=created_at_lt
+    )
 
 
 @app.get("/tools/{id}")
@@ -111,7 +116,9 @@ class AgentIDsRequest(BaseModel):
 
 @app.post("/tools/{id}/agents")
 @error_handler
-async def set_tool_agents(id: str, payload: AgentIDsRequest, user=Depends(authenticate)):
+async def set_tool_agents(
+    id: str, payload: AgentIDsRequest, user=Depends(authenticate)
+):
     return await Tool.set_tool_agents(user["session_id"], id, payload.agent_ids)
 
 

@@ -23,3 +23,9 @@ install-test:
 test:
 	. ./venv/bin/activate
 	python -m pytest
+
+lint:
+	ruff check main.py
+
+format:
+	ruff format main.py
