@@ -67,8 +67,8 @@ Authorization: Bearer <YOUR_JWT>
 If you are planning to serve an API as a tool in Tsiolkovsky into your stack, you can use one of the following SDKs:
 
 - Python - coming soon!
-- Typescript - coming soon!
-- Javascript - coming soon!
+- TypeScript - coming soon!
+- JavaScript - coming soon!
 
 
 ## 🫶 Contributions:
