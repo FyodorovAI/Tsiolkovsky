@@ -53,13 +53,14 @@ async def get_plugin_well_known(
         except Exception as e:
             print("User not found", e)
     if user:
-        tool_dict = await Tool.get_by_user_and_name_in_db(
+        tool = await Tool.get_by_user_and_name_in_db(
             user["session_id"], user_id, name
-        ).to_plugin()
+        )
     else:
-        tool_dict = await Tool.get_by_user_and_name_in_db(
+        tool = await Tool.get_by_user_and_name_in_db(
             None, user_id, name
-        ).to_plugin()
+        )
+    tool_dict = tool.to_plugin()
     yaml_str = yaml.dump(tool_dict)
     return Response(content=yaml_str, media_type="application/x-yaml")
 
