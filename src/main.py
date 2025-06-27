@@ -136,6 +136,15 @@ async def delete_tool(id: str, user=Depends(authenticate)):
     return await Tool.delete_in_db(user["session_id"], id)
 
 
+@app.post("/tools/{id}/call")
+@error_handler
+async def call_mcp_tool(id: str, request: Request, user=Depends(authenticate)):
+    body = await request.json() if request.headers.get("content-type") == "application/json" else {}
+    args = body.get("args", {})
+    result = await Tool.call_mcp_server(id, user["session_id"], args)
+    return {"result": result}
+
+
 # Oauth endpoints
 @app.post("/oauth/callback/{service_name}")
 async def oauth_callback(service_name: str, request: Request):
