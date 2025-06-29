@@ -14,6 +14,8 @@ from fyodorov_utils.auth.endpoints import users_app
 from fyodorov_utils.decorators.logging import error_handler
 from fyodorov_utils.services.yaml import app as yaml_app
 from fyodorov_utils.auth.auth import authenticate
+from fyodorov_utils.service_discovery import get_service_url
+import requests
 
 app = FastAPI(
     title="Tsiolkovsky",
@@ -82,6 +84,36 @@ async def create_tool_from_yaml(request: Request, user=Depends(authenticate)):
 @error_handler
 async def create_tool(tool: ToolModel, user=Depends(authenticate)):
     print(f"User: {user}")
+    
+    # If no api_url provided, provision container via Zhukovsky
+    if not tool.api_url:
+        print(f"No api_url provided, provisioning container for tool: {tool.handle}")
+        try:
+            zhukovsky_url = get_service_url('Zhukovsky')
+            
+            provision_response = requests.post(
+                f"{zhukovsky_url}/create",
+                json={
+                    "user_id": user["sub"],
+                    "tool_handle": tool.handle
+                },
+                timeout=120  # 2 minutes for container creation
+            )
+            
+            if provision_response.status_code == 200:
+                container_info = provision_response.json()
+                tool.api_url = f"http://{container_info['host']}:{container_info['port']}"
+                print(f"Provisioned container at: {tool.api_url}")
+            else:
+                print(f"Failed to provision container: {provision_response.status_code} - {provision_response.text}")
+                raise HTTPException(
+                    status_code=500, 
+                    detail=f"Failed to provision container: {provision_response.text}"
+                )
+        except requests.exceptions.RequestException as e:
+            print(f"Error communicating with Zhukovsky: {e}")
+            raise HTTPException(status_code=500, detail="Failed to communicate with container service")
+    
     # Pass the authenticated user's ID when creating the tool in the database
     tool = await Tool.create_in_db(user["session_id"], tool, user["sub"])
     return tool
@@ -168,5 +200,9 @@ async def oauth_callback(service_name: str, request: Request):
     return JSONResponse(status_code=200)
 
 
+from fyodorov_llm_agents.db import initialize_db
+
 if __name__ == "__main__":
+    import asyncio
+    asyncio.run(initialize_db())
     uvicorn.run(app, host="0.0.0.0", port=3000)
