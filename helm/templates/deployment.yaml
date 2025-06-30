@@ -37,3 +37,5 @@ spec:
             httpGet:
               path: /health
               port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
