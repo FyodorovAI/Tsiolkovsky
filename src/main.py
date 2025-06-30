@@ -200,7 +200,6 @@ async def oauth_callback(service_name: str, request: Request):
     return JSONResponse(status_code=200)
 
 
-from fyodorov_llm_agents.db import initialize_db
 
 if __name__ == "__main__":
     import asyncio
