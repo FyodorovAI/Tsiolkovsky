@@ -14,7 +14,7 @@ from fyodorov_utils.auth.endpoints import users_app
 from fyodorov_utils.decorators.logging import error_handler
 from fyodorov_utils.services.yaml import app as yaml_app
 from fyodorov_utils.auth.auth import authenticate
-from fyodorov_utils.service_discovery import get_service_url
+from fyodorov_utils.config.service_discovery import get_service_url
 import requests
 
 app = FastAPI(
