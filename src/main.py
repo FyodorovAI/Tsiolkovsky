@@ -203,5 +203,4 @@ async def oauth_callback(service_name: str, request: Request):
 
 if __name__ == "__main__":
     import asyncio
-    asyncio.run(initialize_db())
     uvicorn.run(app, host="0.0.0.0", port=3000)
