@@ -1,34 +1,10 @@
-# Ignore files and directories generated during Helm chart packaging
-charts/
-tmp/
-*.tgz
-
-# Ignore version control files and directories
-.git/
-.svn/
-.hg/
-.bzr/
-
-# Ignore editor and IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-*.bak
-
-# Ignore build artifacts and compiled files
-*.o
-*.obj
-*.exe
-*.dll
-*.so
-*.dylib
-
-# Ignore logs and temporary files
-*.log
-*.tmp
-*.temp
-
-# Ignore documentation and test files
-docs/
-test/
+venv/
+*.pyc
+__pycache__/
+model
+*.bin
+*.h5
+*.pt
+*.pkl
+*.tar.gz
+*.zip
