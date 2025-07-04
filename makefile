@@ -10,3 +10,6 @@ deploy-helm:
 
 docker-build:
 	./scripts/docker-push.sh
+
+uninstall-helm:
+	make -C ./helm uninstall-helm
