@@ -8,7 +8,7 @@ COPY ./src/requirements.txt .
 RUN uv pip install --system uvicorn \
     && uv pip install --system --no-cache-dir -r requirements.txt
 RUN uv pip install --system fyodorov_utils==0.4.35
-RUN uv pip install --system fyodorov_llm_agents==0.5.35
+RUN uv pip install --system fyodorov_llm_agents==0.5.36
 
 COPY ./src .
 
