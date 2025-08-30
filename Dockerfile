@@ -7,7 +7,7 @@ COPY ./src/requirements.txt .
 # Install dependencies globally using --system
 RUN uv pip install --system uvicorn \
     && uv pip install --system --no-cache-dir -r requirements.txt
-RUN uv pip install --system fyodorov_utils==0.4.45
+RUN uv pip install --system fyodorov_utils==0.4.46
 RUN uv pip install --system fyodorov_llm_agents==0.5.47
 
 COPY ./src .
